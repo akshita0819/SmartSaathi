@@ -1,0 +1,185 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Disease Checker</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.container{
+background:white;
+width:380px;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+h2{
+text-align:center;
+color:#4F46E5;
+margin-bottom:20px;
+}
+
+label{
+font-size:13px;
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+margin-top:5px;
+margin-bottom:15px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#4F46E5;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#4338ca;
+}
+
+.result{
+margin-top:20px;
+font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Disease Checker</h2>
+
+<label>Enter Symptom</label>
+<input type="text" id="symptom" placeholder="Example: itching, headache">
+
+<button onclick="predictDisease()">Check Disease</button>
+
+<div id="result" class="result"></div>
+
+</div>
+
+<script>
+
+let diseaseDataset=[];
+let descriptionDataset=[];
+let precautionDataset=[];
+
+fetch("dataset_yourgpt.json")
+.then(res=>res.json())
+.then(data=>diseaseDataset=data);
+
+fetch("symptom_Description_yourgpt.json")
+.then(res=>res.json())
+.then(data=>descriptionDataset=data);
+
+fetch("symptom_precaution_yourgpt.json")
+.then(res=>res.json())
+.then(data=>precautionDataset=data);
+
+function predictDisease(){
+
+let symptom=document.getElementById("symptom")
+.value
+.toLowerCase()
+.trim()
+.replace(/\s+/g,"_");
+
+if(!symptom){
+alert("Enter symptom");
+return;
+}
+
+let disease=null;
+
+for(let row of diseaseDataset){
+
+let values=Object.values(row);
+
+for(let v of values){
+
+let text=String(v).toLowerCase().trim();
+
+if(text.includes(symptom)){
+disease=row.prognosis || row.Disease;
+break;
+}
+
+}
+
+if(disease) break;
+
+}
+
+if(!disease){
+
+document.getElementById("result").innerHTML=
+"No disease found.";
+
+return;
+
+}
+
+let descObj=descriptionDataset.find(d=>
+d.Disease.toLowerCase()===disease.toLowerCase()
+);
+
+let precObj=precautionDataset.find(p=>
+p.Disease.toLowerCase()===disease.toLowerCase()
+);
+
+let html="<b>Disease:</b> "+disease+"<br><br>";
+
+if(descObj){
+html+="<b>Description:</b><br>"+descObj.Description+"<br><br>";
+}
+
+if(precObj){
+
+html+="<b>Precautions:</b><br>";
+
+html+="• "+precObj.Precaution_1+"<br>";
+html+="• "+precObj.Precaution_2+"<br>";
+html+="• "+precObj.Precaution_3+"<br>";
+html+="• "+precObj.Precaution_4+"<br>";
+
+}
+
+document.getElementById("result").innerHTML=html;
+
+}
+
+</script>
+
+</body>
+</html>
+```
