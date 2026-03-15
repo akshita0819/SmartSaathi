@@ -1,57 +1,16 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartSaathi</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartSaathi</title>
 
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            background:#f4f6f9;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
-        }
-
-        .container{
-            background:white;
-            padding:40px;
-            border-radius:10px;
-            text-align:center;
-            box-shadow:0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        h1{
-            color:#4F46E5;
-        }
-
-        p{
-            color:#555;
-            margin-top:10px;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>SmartSaathi</h1>
-
-<p>
-Secure Medical Ecosystem for Emergency Assistance.
-This application helps users store medical information
-and contact guardians in emergency situations.
-</p>
-
-</div>
-  
 <style>
 
 body{
-font-family: Arial, sans-serif;
+font-family:Arial,sans-serif;
 background:#0f172a;
 display:flex;
 justify-content:center;
@@ -88,7 +47,7 @@ text-align:left;
 label{
 font-size:12px;
 font-weight:bold;
-color:#666;
+color:#555;
 }
 
 input{
@@ -115,7 +74,6 @@ background:#4338ca;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -128,20 +86,43 @@ background:#4338ca;
 
 <div class="input-group">
 <label>Full Name</label>
-<input type="text" placeholder="Enter your name">
+<input type="text" id="name">
 </div>
 
 <div class="input-group">
 <label>Age</label>
-<input type="number" placeholder="Enter your age">
+<input type="number" id="age">
 </div>
 
-<button>Continue</button>
+<button onclick="nextPage()">Continue</button>
 
 </div>
 
+<script>
 
+function nextPage(){
 
+let name=document.getElementById("name").value;
+let age=document.getElementById("age").value;
+
+if(!name || !age){
+alert("Please fill all details");
+return;
+}
+
+let db={
+name:name,
+age:age
+};
+
+localStorage.setItem("saathi_v4_final",JSON.stringify(db));
+
+window.location.href="emergency.html";
+
+}
+
+</script>
 
 </body>
 </html>
+```
