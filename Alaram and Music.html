@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartSaathi Music & Alarm</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.container{
+background:white;
+width:360px;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+h2{
+text-align:center;
+color:#4F46E5;
+margin-bottom:15px;
+}
+
+.section{
+margin-bottom:25px;
+}
+
+label{
+font-size:12px;
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#4F46E5;
+border:none;
+color:white;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+background:#4338ca;
+}
+
+.song-list{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+margin-top:10px;
+}
+
+.song{
+background:#eef2ff;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+cursor:pointer;
+}
+
+.song:hover{
+background:#c7d2fe;
+}
+
+.med{
+display:flex;
+gap:5px;
+margin-top:8px;
+}
+
+.med input{
+flex:1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Music Player</h2>
+
+<div class="section">
+
+<input type="text" id="song" placeholder="Search song">
+
+<button onclick="playSong()">Play Song</button>
+
+<div class="song-list">
+
+<div class="song" onclick="quick('Heeriye')">Heeriye</div>
+<div class="song" onclick="quick('Kesariya')">Kesariya</div>
+<div class="song" onclick="quick('Believer')">Believer</div>
+<div class="song" onclick="quick('Perfect')">Perfect</div>
+
+</div>
+
+</div>
+
+
+<h2>Medicine Alarm</h2>
+
+<div class="section">
+
+<div id="medList"></div>
+
+<div class="med">
+<input type="text" id="medName" placeholder="Medicine">
+<input type="time" id="medTime">
+</div>
+
+<button onclick="addMed()">Add Medicine</button>
+
+</div>
+
+</div>
+
+<script>
+
+let db=JSON.parse(localStorage.getItem("saathi_v4_final"))||{};
+
+if(!db.meds) db.meds=[];
+
+function playSong(){
+
+let song=document.getElementById("song").value;
+
+if(!song) return;
+
+window.open(
+"https://www.youtube.com/results?search_query="+
+encodeURIComponent(song)
+,"_blank");
+
+}
+
+function quick(name){
+
+document.getElementById("song").value=name;
+
+playSong();
+
+}
+
+function addMed(){
+
+let name=document.getElementById("medName").value;
+let time=document.getElementById("medTime").value;
+
+if(!name||!time) return;
+
+db.meds.push({n:name,t:time});
+
+localStorage.setItem("saathi_v4_final",JSON.stringify(db));
+
+render();
+
+document.getElementById("medName").value="";
+document.getElementById("medTime").value="";
+
+}
+
+function render(){
+
+let html="";
+
+db.meds.forEach(m=>{
+html+="<div>"+m.n+" - "+m.t+"</div>";
+});
+
+document.getElementById("medList").innerHTML=html;
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
+
