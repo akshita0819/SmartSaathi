@@ -1,13 +1,16 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergency Contact</title>
 
 <style>
 
 body{
-font-family: Arial;
+font-family:Arial,sans-serif;
 background:#0f172a;
 display:flex;
 justify-content:center;
@@ -18,15 +21,16 @@ margin:0;
 
 .container{
 background:white;
-padding:30px;
-border-radius:15px;
 width:350px;
+padding:30px;
+border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
 h2{
 text-align:center;
 color:#4F46E5;
+margin-bottom:20px;
 }
 
 .input-group{
@@ -54,6 +58,7 @@ color:white;
 border:none;
 border-radius:10px;
 cursor:pointer;
+font-weight:bold;
 }
 
 button:hover{
@@ -71,17 +76,47 @@ background:#4338ca;
 
 <div class="input-group">
 <label>Guardian Name</label>
-<input type="text" placeholder="Enter guardian name">
+<input type="text" id="guardian">
 </div>
 
 <div class="input-group">
 <label>Phone Number</label>
-<input type="tel" placeholder="Enter phone number">
+<input type="tel" id="phone">
 </div>
 
-<button>Save Contact</button>
+<button onclick="saveContact()">Save Contact</button>
 
 </div>
+
+<script>
+
+function saveContact(){
+
+let guardian=document.getElementById("guardian").value;
+let phone=document.getElementById("phone").value;
+
+if(!guardian || !phone){
+alert("Please fill guardian details");
+return;
+}
+
+let db=JSON.parse(localStorage.getItem("saathi_v4_final")) || {};
+
+db.g1={
+name:guardian,
+p:phone
+};
+
+localStorage.setItem("saathi_v4_final",JSON.stringify(db));
+
+alert("Emergency contact saved");
+
+window.location.href="dashboard.html";
+
+}
+
+</script>
 
 </body>
 </html>
+```
