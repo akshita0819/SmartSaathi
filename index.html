@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SmartSaathi</title>
+<title>SmartSaathi Setup</title>
 
 <style>
 
@@ -23,7 +23,7 @@ margin:0;
 
 .container{
 background:white;
-width:360px;
+width:380px;
 padding:30px;
 border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.3);
@@ -69,6 +69,7 @@ color:white;
 border-radius:10px;
 font-weight:bold;
 cursor:pointer;
+margin-top:10px;
 }
 
 button:hover{
@@ -93,8 +94,18 @@ background:#4338ca;
 </div>
 
 <div class="input-group">
+<label>Phone Number</label>
+<input type="tel" id="phone">
+</div>
+
+<div class="input-group">
 <label>Age</label>
 <input type="number" id="age">
+</div>
+
+<div class="input-group">
+<label>Medical Condition (optional)</label>
+<input type="text" id="disease" placeholder="Example: Diabetes">
 </div>
 
 <button onclick="nextPage()">Continue</button>
@@ -106,16 +117,25 @@ background:#4338ca;
 function nextPage(){
 
 let name=document.getElementById("name").value;
+let phone=document.getElementById("phone").value;
 let age=document.getElementById("age").value;
+let disease=document.getElementById("disease").value;
 
-if(!name || !age){
-alert("Please fill all details");
+if(!name || !phone || !age){
+alert("Please fill all required details");
 return;
 }
 
 let db={
 name:name,
-age:age
+phone:phone,
+age:age,
+disease:disease,
+photo:"",
+doctor:{},
+g1:{},
+g2:{},
+meds:[]
 };
 
 localStorage.setItem("saathi_v4_final",JSON.stringify(db));
@@ -128,4 +148,4 @@ window.location.href="emergency.html";
 
 </body>
 </html>
-```
+
