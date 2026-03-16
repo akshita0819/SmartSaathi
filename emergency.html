@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Emergency Contact</title>
+<title>Emergency Contacts</title>
 
 <style>
 
@@ -23,7 +23,7 @@ margin:0;
 
 .container{
 background:white;
-width:360px;
+width:380px;
 padding:30px;
 border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.3);
@@ -61,6 +61,7 @@ border:none;
 border-radius:10px;
 cursor:pointer;
 font-weight:bold;
+margin-top:10px;
 }
 
 button:hover{
@@ -75,44 +76,87 @@ background:#4338ca;
 
 <div class="container">
 
-<h2>Emergency Contact</h2>
+<h2>Emergency Contacts</h2>
 
 <div class="input-group">
-<label>Guardian Name</label>
-<input type="text" id="guardian">
+<label>Doctor Name</label>
+<input type="text" id="doctorName">
 </div>
 
 <div class="input-group">
-<label>Phone Number</label>
-<input type="tel" id="phone">
+<label>Doctor Phone</label>
+<input type="tel" id="doctorPhone">
 </div>
 
-<button onclick="saveContact()">Save Contact</button>
+<div class="input-group">
+<label>Guardian 1 Name</label>
+<input type="text" id="g1Name">
+</div>
+
+<div class="input-group">
+<label>Guardian 1 Phone</label>
+<input type="tel" id="g1Phone">
+</div>
+
+<div class="input-group">
+<label>Guardian 2 Name</label>
+<input type="text" id="g2Name">
+</div>
+
+<div class="input-group">
+<label>Guardian 2 Phone</label>
+<input type="tel" id="g2Phone">
+</div>
+
+<button onclick="saveContacts()">Save Contacts</button>
 
 </div>
 
 <script>
 
-function saveContact(){
+function saveContacts(){
 
-let guardian=document.getElementById("guardian").value;
-let phone=document.getElementById("phone").value;
+let docName=document.getElementById("doctorName").value;
+let docPhone=document.getElementById("doctorPhone").value;
 
-if(!guardian || !phone){
-alert("Please fill guardian details");
+let g1Name=document.getElementById("g1Name").value;
+let g1Phone=document.getElementById("g1Phone").value;
+
+let g2Name=document.getElementById("g2Name").value;
+let g2Phone=document.getElementById("g2Phone").value;
+
+let numbers=[docPhone,g1Phone,g2Phone].filter(n=>n);
+
+if(new Set(numbers).size!==numbers.length){
+
+alert("Phone numbers must be unique");
+
 return;
+
 }
 
-let db=JSON.parse(localStorage.getItem("saathi_v4_final")) || {};
+let db=JSON.parse(localStorage.getItem("saathi_v4_final"))||{};
+
+db.doctor={
+name:docName,
+p:docPhone
+};
 
 db.g1={
-name:guardian,
-p:phone
+name:g1Name,
+p:g1Phone
+};
+
+db.g2={
+name:g2Name,
+p:g2Phone
 };
 
 localStorage.setItem("saathi_v4_final",JSON.stringify(db));
 
-alert("Emergency contact saved");
+alert("Emergency contacts saved");
+
+window.location.href="index.html";
 
 }
 
@@ -120,4 +164,4 @@ alert("Emergency contact saved");
 
 </body>
 </html>
-```
+
