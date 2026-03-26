@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SmartSaathi Disease Checker | Developed by Your Name</title>
+<title>SmartSaathi Disease Checker</title>
 
 <style>
 
@@ -106,22 +106,20 @@ margin-top:15px;
 
 <button class="back" onclick="goBack()">Back to Dashboard</button>
 
-<!-- Contribution Credit -->
-<div style="text-align:center; margin-top:15px; font-size:12px; color:#888;">
-    Developed with ❤️ by Your Name
-</div>
-
 </div>
 
 <script>
 
-// Feature enhancement and UI contribution by Your Name
+let db = {};
 
-let db=JSON.parse(localStorage.getItem("saathi_v4_final"))||{};
-
-if(db.name){
-document.getElementById("username").innerText="Hello, "+db.name;
-}
+fetch("http://localhost:3000/get-user")
+.then(res => res.json())
+.then(data => {
+    db = data || {};
+    if(db.name){
+        document.getElementById("username").innerText = "Hello, " + db.name;
+    }
+});
 
 let diseaseDataset=[];
 let descriptionDataset=[];
@@ -192,34 +190,42 @@ let precObj=precautionDataset.find(p=>
 p.Disease.toLowerCase()===disease.toLowerCase()
 );
 
-let html="<b>Disease:</b> "+disease+"<br><br>";
+document.getElementById("result").innerHTML = `
+<div style="color:#1e293b;">
+<h3 style="color:#4F46E5;">${disease}</h3>
+${descObj ? `<p><b>Description:</b><br>${descObj.Description}</p>` : ""}
+${precObj ? `
+<p><b>Precautions:</b></p>
+<ul>
+<li>${precObj.Precaution_1}</li>
+<li>${precObj.Precaution_2}</li>
+<li>${precObj.Precaution_3}</li>
+<li>${precObj.Precaution_4}</li>
+</ul>
+` : ""}
+</div>
+`;
 
-if(descObj){
-html+="<b>Description:</b><br>"+descObj.Description+"<br><br>";
-}
-
-if(precObj){
-
-html+="<b>Precautions:</b><br>";
-
-html+="• "+precObj.Precaution_1+"<br>";
-html+="• "+precObj.Precaution_2+"<br>";
-html+="• "+precObj.Precaution_3+"<br>";
-html+="• "+precObj.Precaution_4;
-
-}
-
-document.getElementById("result").innerHTML=html;
+fetch("http://localhost:3000/save-user", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+...db,
+lastSymptom: symptom,
+lastDisease: disease
+})
+});
 
 }
 
 function goBack(){
-
-window.location.href="index.html";
-
+window.location.href="update2.html";
 }
 
 </script>
 
 </body>
+
 </html>
