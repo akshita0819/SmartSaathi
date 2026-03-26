@@ -3,100 +3,70 @@ const assistant = new (window.SpeechRecognition || window.webkitSpeechRecognitio
 assistant.lang = "en-US";
 assistant.continuous = false;
 
+let db = {};
+
+fetch("http://localhost:3000/get-user")
+.then(res => res.json())
+.then(data => {
+    db = data || {};
+});
+
 function startVoice(){
-
 assistant.start();
-
 document.getElementById("voice-status").innerText = "Listening...";
-
 }
 
 assistant.onresult = function(e){
-
 let command = e.results[0][0].transcript.toLowerCase().trim();
-
 document.getElementById("voice-status").innerText = command;
-
 processCommand(command);
-
 };
 
 assistant.onend = function(){
-
 document.getElementById("voice-status").innerText = "Voice Assistant Ready";
-
 };
 
 function speak(text){
-
 window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-
 }
 
 function processCommand(command){
 
-// youtube music system
 if(command.includes("play")){
-
 let song = command.replace("play","").trim();
-
 if(song){
-
 speak("Playing " + song);
-
 window.open(
 "https://www.youtube.com/results?search_query="+encodeURIComponent(song),
 "_blank"
 );
-
+}
 }
 
-}
-
-// DISEASE CHECK
 else if(command.includes("disease") || command.includes("symptom")){
-
 speak("Opening disease checker");
-
-window.location.href = "Check Diseases.html";
-
+window.location.href = "disease.html";
 }
 
-// 🚨 SOS
 else if(command.includes("sos") || command.includes("help")){
-
 speak("Emergency activated");
-
-let db = JSON.parse(localStorage.getItem("saathi_v4_final")) || {};
-
 if(db.g1 && db.g1.p){
 window.location.href = "tel:" + db.g1.p;
 }
-
 }
 
-// ⚙️ NAVIGATION
 else if(command.includes("home") || command.includes("dashboard")){
-
 speak("Going to dashboard");
-
-window.location.href = "index.html";
-
+window.location.href = "update2.html";
 }
 
 else if(command.includes("alarm") || command.includes("medicine")){
-
 speak("Opening medicine section");
-
-window.location.href = "Alaram and Music.html";
-
+window.location.href = "alarm.html";
 }
 
-//  UNKNOWN
 else{
-
 speak("Sorry, command not recognized");
-
 }
 
 }
