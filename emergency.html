@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -114,6 +113,14 @@ background:#4338ca;
 
 <script>
 
+let db = {};
+
+fetch("http://localhost:3000/get-user")
+.then(res => res.json())
+.then(data => {
+    db = data || {};
+});
+
 function saveContacts(){
 
 let docName=document.getElementById("doctorName").value;
@@ -128,14 +135,9 @@ let g2Phone=document.getElementById("g2Phone").value;
 let numbers=[docPhone,g1Phone,g2Phone].filter(n=>n);
 
 if(new Set(numbers).size!==numbers.length){
-
 alert("Phone numbers must be unique");
-
 return;
-
 }
-
-let db=JSON.parse(localStorage.getItem("saathi_v4_final"))||{};
 
 db.doctor={
 name:docName,
@@ -152,11 +154,17 @@ name:g2Name,
 p:g2Phone
 };
 
-localStorage.setItem("saathi_v4_final",JSON.stringify(db));
-
+fetch("http://localhost:3000/save-user", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify(db)
+})
+.then(() => {
 alert("Emergency contacts saved");
-
-window.location.href="index.html";
+window.location.href="update2.html";
+});
 
 }
 
@@ -164,4 +172,3 @@ window.location.href="index.html";
 
 </body>
 </html>
-
