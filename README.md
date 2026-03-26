@@ -1,4 +1,4 @@
-# 🩺 SmartSaathi – Secure Medical Ecosystem
+# 🩺 SmartSaathi – Secure Medical Ecosystem (Full-Stack Version)
 
 SmartSaathi is a lightweight emergency medical web application designed to help users store important health information and quickly contact guardians during emergencies.
 
@@ -8,48 +8,59 @@ The system allows users to register their identity, store medical details, manag
 
 # 🚀 Features
 
-- 👤 User Identity Registration
-- 📞 Emergency Guardian Contact Management
-- 🩺 Symptom-Based Disease Checker
-- ⏰ Medicine Reminder System
-- 🚨 One-Tap SOS Emergency Alert
-- 📍 Live GPS Location Tracking
-- ❤️ Simulated Health Vitals Monitoring
-- 🎵 Music Player for Relaxation
-- ⚙️ Profile Settings Management
+* 👤 User Identity Registration (with backend storage)
+* 📧 Email + OTP Verification System
+* 📞 Emergency Guardian Contact Management
+* 🩺 Symptom-Based Disease Checker
+* ⏰ Medicine Reminder System
+* 🚨 One-Tap SOS Emergency Alert
+* 📍 Live GPS Location Tracking
+* ❤️ Simulated Health Vitals Monitoring
+* 🎵 Music Player for Relaxation
+* 🎤 Voice Assistant Control
+* ⚙️ Profile Settings Management
 
 ---
 
 # 🛠 Technologies Used
 
-- HTML5
-- CSS3
-- JavaScript
-- LocalStorage API
-- Geolocation API
-- Web Speech API
-- Font Awesome Icons
+## Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+* Web Speech API
+* Geolocation API
+* Font Awesome Icons
+
+## Backend
+
+* Node.js
+* Express.js
+* File System (JSON-based database)
 
 ---
 
 # ⚙️ How the Application Works
 
-1. User registers personal identity information.
-2. User adds emergency guardian and doctor contacts.
-3. User can add medicine reminders with time scheduling.
-4. All data is stored securely using the browser LocalStorage.
-5. The dashboard displays:
-   - Health summary
-   - Simulated heart rate
-   - Current GPS location
-6. Users can search and play music for relaxation.
-7. The **Disease Checker** allows users to enter symptoms.
-8. The system searches the dataset and predicts a possible disease.
-9. The application displays:
-   - Disease name
-   - Description
-   - Recommended precautions.
-10. In case of emergency, the user can press the **SOS button** to contact guardians.
+1. User registers personal identity information along with email verification.
+2. Data is sent to the backend and stored in a local JSON database.
+3. User adds emergency guardian and doctor contacts.
+4. Medicine reminders can be scheduled with time alerts.
+5. Dashboard displays:
+
+   * Health summary
+   * Simulated heart rate
+   * Current GPS location
+6. Voice assistant allows hands-free control.
+7. Music system enables relaxation through YouTube integration.
+8. Disease Checker allows users to input symptoms.
+9. Backend-connected system processes and displays:
+
+   * Disease name
+   * Description
+   * Precautions
+10. SOS button triggers emergency call to guardian.
 
 ---
 
@@ -60,23 +71,24 @@ The Disease Checker helps users identify possible illnesses based on symptoms.
 ### How It Works
 
 1. User enters a symptom (example: itching, headache).
-2. The system scans the symptom dataset.
+2. System scans the dataset.
 3. A matching disease is predicted.
-4. The system displays:
-   - Disease name
-   - Disease description
-   - Precautions to follow.
+4. The application displays:
+
+   * Disease name
+   * Description
+   * Precautions
 
 ---
 
 # 📊 Datasets Used
 
-- `dataset_yourgpt.json`
-- `symptom_Description_yourgpt.json`
-- `symptom_precaution_yourgpt.json`
-- `Symptom-severity_yourgpt.json`
+* dataset_yourgpt.json
+* symptom_Description_yourgpt.json
+* symptom_precaution_yourgpt.json
+* Symptom-severity_yourgpt.json
 
-These datasets help map symptoms to diseases and provide medical descriptions and precautions.
+These datasets are used to map symptoms to diseases and provide descriptions and precautions.
 
 ---
 
@@ -84,51 +96,93 @@ These datasets help map symptoms to diseases and provide medical descriptions an
 
 When the SOS button is activated:
 
-- Emergency alert mode is triggered
-- Primary guardian contact is called
-- User location is detected using GPS
-- Emergency status is displayed on the screen
+* Emergency alert is triggered
+* Guardian contact is called automatically
+* User location is fetched using GPS
+* Voice alert confirms activation
 
 ---
 
 # 💾 Data Storage
 
-All user information is stored locally in the browser using the **LocalStorage API**.
+All user data is stored using a backend system:
 
-No external database is required for this application.
+* Stored in: `database.json`
+* Managed via Node.js + Express API
+* No browser dependency (unlike localStorage)
 
 ---
 
 # 📂 Project Structure
+
 SmartSaathi
 │
-├── index.html
+├── server.js
+├── database.json
+├── update2.html
 ├── emergency.html
-├── Alaram and Music.html
-├── Check Diseases.html
+├── disease.html
+├── alarm.html
 ├── dataset_yourgpt.json
 ├── symptom_Description_yourgpt.json
 ├── symptom_precaution_yourgpt.json
 ├── Symptom-severity_yourgpt.json
+├── package.json
 └── README.md
 
 ---
 
+# ▶️ How to Run the Project
+
+## 1. Install Dependencies
+
+```
+npm install express cors
+```
+
+## 2. Start Backend Server
+
+```
+node server.js
+```
+
+Server runs on:
+
+```
+http://localhost:3000
+```
+
+## 3. Run Frontend
+
+* Open HTML files using Live Server (VS Code)
+
+---
 
 # 🎯 Purpose of the Project
 
 SmartSaathi aims to provide a simple and accessible digital health support system that helps users:
 
-- Store essential medical information
-- Manage medicine reminders
-- Predict possible diseases from symptoms
-- Contact emergency guardians quickly
-- Access basic health monitoring tools
+* Store essential medical information
+* Manage medicine reminders
+* Predict possible diseases
+* Enable emergency communication
+* Use voice-based interaction
 
-This project demonstrates how web technologies can be used to build a **lightweight healthcare assistance platform**.
+This project demonstrates how web technologies can be used to build a **full-stack healthcare assistance platform**.
+
+---
+
+# 🔮 Future Enhancements
+
+* ☁️ Cloud database (MongoDB)
+* 📱 Mobile app (Android APK)
+* 🤖 AI-based disease prediction model
+* 📩 Real Email/SMS OTP system
+* 🧠 Personalized health recommendations
+* 📊 Health analytics dashboard
 
 ---
 
 # 📜 License
 
-This project is developed for **educational and research purposes**.
+This project is developed for **educational and research purposes only**.
