@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SmartSaathi AI | Advanced Care</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6366F1;
+            --secondary: #EC4899;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg: #EEF2FF;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0F172A, #1E293B);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 420px;
+            height: 95vh;
+            background: var(--bg);
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid #334155;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Screens */
+
+        .screen {
+            position: absolute;
+            inset: 0;
+            padding: 25px;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .screen.active {
+            display: flex;
+            animation: slideIn .35s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+
+        /* Profile Photo */
+
+        .photo-upload {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            cursor: pointer;
+        }
+
+        .photo-upload img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Cards */
+
+        .card {
+            background: var(--glass);
+            padding: 18px;
+            border-radius: 22px;
+            border: 1px solid white;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: .25s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Inputs */
+
+        label {
+            display: block;
+            font-weight: 800;
+            font-size: .75rem;
+            margin-bottom: 6px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            font-size: .95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            transition: .25s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Buttons */
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary), #818CF8);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: auto;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.35);
+            transition: .25s;
+        }
+
+        .btn-main:hover {
+            transform: scale(1.03);
+        }
+
+        /* Header */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 6px 16px 6px 6px;
+            border-radius: 50px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Voice Assistant Button */
+
+        .mic-btn {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            color: white;
+            font-size: 2rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+            margin: 20px auto;
+            transition: .25s;
+        }
+
+        .mic-btn:hover {
+            transform: scale(1.08);
+        }
+
+        /* Vitals */
+
+        .vitals {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .vital-card {
+            background: white;
+            padding: 16px;
+            border-radius: 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        /* emergerncy button*/
+
+        .sos-btn {
+            background: linear-gradient(135deg, #EF4444, #B91C1C);
+            color: white;
+            padding: 20px;
+            border-radius: 25px;
+            font-weight: 900;
+            font-size: 1.3rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+            margin-top: auto;
+            transition: .25s;
+        }
+
+        .sos-btn:hover {
+            transform: scale(1.03);
+        }
+
+        /* Music css */
+
+        .music-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .play-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Playlist */
+
+        .playlist {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            margin-top: 10px;
+            padding-bottom: 5px;
+        }
+
+        .song-tag {
+            background: linear-gradient(135deg, #fecaca, #fca5a5, #f87171);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: .75rem;
+            font-weight: 700;
+            color: #b91c1c;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .song-tag:hover {
+            transform: scale(1.08);
+        }
+
+        /* Check Disease Button */
+
+        #dis {
+            width: 200%;
+            padding: 20px;
+            font-size: .95rem;
+            border-radius: 18px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        #dis:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <div id="scr-reg-1" class="screen active">
+            <h1 style="color:var(--primary); font-size: 2rem;">Welcome!</h1>
+            <p style="color:#64748B; margin-bottom:20px; font-weight: 600;">Let's set up your profile.</p>
+
+            <div class="photo-upload" onclick="document.getElementById('p-in').click()">
+                <img id="p-prev" src="" style="display:none">
+                <i class="fa-solid fa-camera" id="p-ic" style="color: var(--primary); font-size: 1.5rem;"></i>
+                <input type="file" id="p-in" hidden onchange="handlePhoto(this)">
+            </div>
+
+            <div class="card">
+                <label>Your Name</label><input type="text" id="r-name" placeholder="Full Name">
+                <label>Phone Number</label><input type="tel" id="r-phone" placeholder="10 Digit Number">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div><label>Age</label><input type="number" id="r-age" placeholder="Years"></div>
+                    <div><label>Disease</label><input type="text" id="r-disease" placeholder="If any"></div>
+                </div>
+            </div>
+
+            <button class="btn-main" onclick="nextStep(2)">Continue <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div id="scr-reg-2" class="screen">
+            <h1 style="color:var(--secondary);">Support Circle</h1>
+            <p style="color:#64748B; margin-bottom:20px; font-weight: 600;">Who should we contact in emergency?</p>
+
+            <div class="card" style="border-left: 5px solid var(--success);">
+                <label>Emergency Doctor</label>
+                <input type="text" id="r-dn" placeholder="Doctor's Name" style="margin-bottom:8px">
+                <input type="tel" id="r-dp" placeholder="Doctor's Phone">
+            </div>
+
+            <div class="card" style="border-left: 5px solid var(--primary);">
+                <label>Guardian 1</label>
+                <input type="text" id="r-g1n" placeholder="Name" style="margin-bottom:8px">
+                <input type="tel" id="r-g1p" placeholder="Phone Number">
+            </div>
+
+            <div class="card" style="border-left: 5px solid var(--warning);">
+                <label>Guardian 2</label>
+                <input type="text" id="r-g2n" placeholder="Name" style="margin-bottom:8px">
+                <input type="tel" id="r-g2p" placeholder="Phone Number">
+            </div>
+
+            <button class="btn-main" onclick="processReg()" style="background: var(--success);">Finish Setup <i
+                    class="fa-solid fa-check-double"></i></button>
+        </div>
+
+        <div id="scr-dash" class="screen">
+            <div class="header">
+                <div class="user-pill">
+                    <img id="d-photo" src="" style="width:35px; height:35px; border-radius:50%; background: #ddd;">
+                    <span id="d-name" style="font-weight:800;">User</span>
+                </div>
+                <button onclick="showScreen('scr-settings')"
+                    style="border:none; background:white; width:40px; height:40px; border-radius:15px; color:var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05);"><i
+                        class="fa-solid fa-sliders"></i></button>
+            </div>
+
+            <div class="card" style="border-left: 5px solid var(--primary);">
+                <label style="color:var(--primary);">Smart Player</label>
+                <div class="music-input-group">
+                    <input type="text" id="song-query" placeholder="Play song..." style="margin:0; flex:1;">
+                    <button class="play-btn" onclick="playMusic()"><i class="fa-solid fa-play"
+                            id="play-icon"></i></button>
+                </div>
+                <div class="playlist">
+                    <div class="song-tag" onclick="quickPlay('Heeriye')">Heeriye</div>
+                    <div class="song-tag" onclick="quickPlay('Kesariya')">Kesariya</div>
+                    <div class="song-tag" onclick="quickPlay('Believer')">Believer</div>
+                    <div class="song-tag" onclick="quickPlay('Perfect')">Perfect</div>
+                    <div class="song-tag" onclick="quickPlay('Calm Down')">Calm Down</div>
+                </div>
+                <audio id="audio-player" style="display:none"></audio>
+            </div>
+
+            <div class="card"
+                style="background: linear-gradient(to right, #ffffff, #f8fafc); border-left: 5px solid var(--secondary);">
+                <div class="card">
+                    <label style="color:var(--primary)">Medicine Schedule</label>
+                    <div id="med-list-dash">No meds added.</div>
+                </div>
+                <label style="color: var(--secondary);">Health Summary</label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                    <span id="d-disease" style="font-weight: 700;">Condition: --</span>
+                    <span id="d-age"
+                        style="background: var(--bg); padding: 2px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 800;">Age:
+                        --</span>
+                </div>
+            </div>
+            <div class="card" style="border-left:5px solid var(--success);">
+                <label style="color:var(--success);">Daily Care Plan</label>
+
+                <div style="margin-top:10px; font-weight:700; line-height:1.8;">
+                    🚶 Walk: <span id="plan-walk">--</span><br>
+                    💧 Water: <span id="plan-water">--</span><br>
+                    🍽️ Diet: <span id="plan-diet">--</span>
+                </div>
+            </div>
+
+
+            <div style="text-align: center;">
+                <button class="mic-btn" id="mic-trigger" onclick="startVoice()"><i
+                        class="fa-solid fa-microphone"></i></button>
+                <p id="voice-status" style="font-weight:800; color:var(--primary); font-size:0.8rem">Voice Assistant
+                    Ready</p>
+            </div>
+
+            <div class="vitals">
+                <div class="vital-card"><i class="fa-solid fa-heart-pulse"
+                        style="color:var(--danger); font-size: 1.2rem;"></i>
+                    <div id="v-bpm" style="font-weight:800; font-size: 1.1rem; margin-top: 5px;">-- BPM</div>
+                </div>
+                <div class="vital-card"><i class="fa-solid fa-location-crosshairs"
+                        style="color:var(--primary); font-size: 1.2rem;"></i>
+                    <div id="v-gps" style="font-size:0.6rem; font-weight:800; margin-top: 5px;">Locating...</div>
+                </div>
+                <button class="btn-main" id="dis" onclick="showScreen('scr-check')"
+                    style="background:var(--primary); margin-bottom:10px;">
+                    <i class="fa-solid fa-stethoscope"></i> Check Disease
+                </button>
+
+                <!-- <button class="sos-btn" onclick="triggerSOS()">SOS EMERGENCY</button> -->
+            </div>
+
+            <button class="sos-btn" onclick="triggerSOS()">SOS EMERGENCY</button>
+        </div>
+
+        <div id="scr-settings" class="screen">
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px">
+                <button onclick="showScreen('scr-dash')" style="border:none; background:none; font-size:1.3rem"><i
+                        class="fa-solid fa-arrow-left"></i></button>
+                <h1 style="color: var(--primary);">Edit Profile</h1>
+            </div>
+            <div class="card">
+                <label>User Info</label>
+                <input type="number" id="s-age" placeholder="Age">
+                <input type="text" id="s-disease" placeholder="Disease">
+            </div>
+            <div class="card">
+                <label>Doctor Details</label>
+                <input type="text" id="s-dn" placeholder="Doctor Name">
+                <input type="tel" id="s-dp" placeholder="Doctor Phone">
+            </div>
+            <div class="card">
+                <label>Medicine List</label>
+                <div id="set-meds"></div>
+                <button onclick="addBlankMed()"
+                    style="width:100%; border:2px dashed var(--primary); padding:10px; border-radius:15px; background:none; color:var(--primary); font-weight:700; cursor:pointer">+
+                    Add New</button>
+            </div>
+            <button class="btn-main" onclick="saveSettings()" style="background:var(--success)">Save Changes</button>
+            <button class="btn-main" onclick="fullReset()"
+                style="background:none; border:2px solid var(--danger); color:var(--danger); margin-top:10px; box-shadow:none;">Reset
+                App</button>
+
+        </div>
+        <div id="scr-check" class="screen">
+
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px">
+                <button onclick="showScreen('scr-dash')" style="border:none;background:none;font-size:1.3rem">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+
+                <h1 style="color:var(--primary)">Disease Checker</h1>
+            </div>
+
+            <div class="card" style="border-left:5px solid var(--primary);">
+
+                <label>Enter Symptom</label>
+
+                <input type="text" id="symptom-input" placeholder="Example: itching, skin rash">
+
+                <button class="btn-main" onclick="predictDisease()"
+                    style="margin-top:10px;background:var(--primary);padding:12px;font-size:0.9rem;">
+                    Check Disease
+                </button>
+
+                <div id="disease-result" style="margin-top:12px;font-weight:700;"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // DATASET LOADING 
+
+        let diseaseDataset = [];
+        let descriptionDataset = [];
+        let precautionDataset = [];
+        let severityDataset = [];
+
+        //  main dataset
+        fetch("dataset_yourgpt.json")
+            .then(res => res.json())
+            .then(data => {
+                diseaseDataset = data;
+                console.log("Disease dataset loaded", diseaseDataset);
+            });
+
+        //  symptom description
+        fetch("symptom_Description_yourgpt.json")
+            .then(res => res.json())
+            .then(data => {
+                descriptionDataset = data;
+                console.log("Description dataset loaded", descriptionDataset);
+            });
+
+        //  precaution dataset
+        fetch("symptom_precaution_yourgpt.json")
+            .then(res => res.json())
+            .then(data => {
+                precautionDataset = data;
+                console.log("Precaution dataset loaded", precautionDataset);
+            });
+
+        // severity dataset
+        fetch("Symptom-severity_yourgpt.json")
+            .then(res => res.json())
+            .then(data => {
+                severityDataset = data;
+                console.log("Severity dataset loaded", severityDataset);
+            });
+        let db = {};
+        let tempPhoto = "";
+
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+
+        window.onload = () => {
+  fetch("http://localhost:5000/user")
+    .then(res => res.json())
+    .then(data => {
+      if (data) {
+        db = data;
+        launchApp();
+      }
+    });
+};
+
+        function handlePhoto(input) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                tempPhoto = e.target.result;
+                document.getElementById('p-prev').src = tempPhoto;
+                document.getElementById('p-prev').style.display = 'block';
+                document.getElementById('p-ic').style.display = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function nextStep(step) {
+            if (step === 2) {
+
+                const name = document.getElementById('r-name').value.trim();
+                const phone = document.getElementById('r-phone').value.trim();
+                const age = document.getElementById('r-age').value.trim();
+                const disease = document.getElementById('r-disease').value.trim();
+
+                if (!name || !phone || !age || !disease) {
+                    alert("❌ All fields are mandatory. Please fill everything.");
+                    return;
+                }
+
+                if (phone.length !== 10) {
+                    alert("❌ Phone number must be 10 digits.");
+                    return;
+                }
+
+                showScreen('scr-reg-2');
+            }
+        }
+
+        function processReg() {
+
+            const dn = document.getElementById('r-dn').value.trim();
+            const dp = document.getElementById('r-dp').value.trim();
+            const g1n = document.getElementById('r-g1n').value.trim();
+            const g1p = document.getElementById('r-g1p').value.trim();
+            const g2n = document.getElementById('r-g2n').value.trim();
+            const g2p = document.getElementById('r-g2p').value.trim();
+
+            // 🚫 EMPTY CHECK
+            if (!dn || !dp || !g1n || !g1p || !g2n || !g2p) {
+                alert("❌ All fields are mandatory in this page.");
+                return;
+            }
+
+            // 🚫 PHONE LENGTH CHECK
+            if (dp.length !== 10 || g1p.length !== 10 || g2p.length !== 10) {
+                alert("❌ All phone numbers must be 10 digits.");
+                return;
+            }
+
+            // 🚫 DUPLICATE CHECK
+            const userP = document.getElementById('r-phone').value;
+            const numbers = [userP, dp, g1p, g2p];
+
+            const hasDuplicates = new Set(numbers).size !== numbers.length;
+
+            if (hasDuplicates) {
+                alert("❌ Each phone number must be unique.");
+                return;
+            }
+
+            // ✅ SAVE DATA
+            db = {
+                name: document.getElementById('r-name').value,
+                phone: userP,
+                age: document.getElementById('r-age').value,
+                disease: document.getElementById('r-disease').value,
+                photo: tempPhoto,
+                doctor: { name: dn, p: dp },
+                g1: { name: g1n, p: g1p },
+                g2: { name: g2n, p: g2p },
+                meds: []
+            };
+
+            fetch("http://localhost:5000/user", {
+  method: "POST",
+  headers: {"Content-Type":"application/json"},
+  body: JSON.stringify(db)
+});
+            launchApp();
+        }
+        // Update this in your existing addBlankMed function
+        function addBlankMed() {
+
+            db.meds.push({
+                n: "Medicine",
+                t: "09:00",
+                lastTriggeredDate: "",
+                repeatCount: 0
+            });
+
+            saveData();
+            updateMedUI();
+
+        }
+        // Update the interval logic inside launchApp()
+        function launchApp() {
+            showScreen('scr-dash');
+            document.getElementById('d-name').innerText = db.name;
+            document.getElementById('d-age').innerText = "Age: " + (db.age || "--");
+            document.getElementById('d-disease').innerText = "Condition: " + (db.disease || "Healthy");
+            const plan = getHealthPlan(db.disease || "");
+
+            document.getElementById("plan-walk").innerText = plan.walk;
+            document.getElementById("plan-water").innerText = plan.water;
+            document.getElementById("plan-diet").innerText = plan.diet;
+            if (db.photo) document.getElementById('d-photo').src = db.photo;
+
+            updateMedUI();
+            function loadHealth() {
+  fetch("http://localhost:5000/health")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('v-bpm').innerText =
+        data.heartRate + " BPM";
+    });
+}
+
+loadHealth();
+if (!window.healthInterval) {
+  window.healthInterval = setInterval(loadHealth, 20000);
+}
+
+                const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                const today = new Date().toDateString();
+
+                db.meds.forEach(m => {
+                    // Check if it's the right time
+                    if (m.t === now) {
+                        // If it's a new day, reset the counter
+                        if (m.lastTriggeredDate !== today) {
+                            m.lastTriggeredDate = today;
+                            m.repeatCount = 0;
+                        }
+
+                        // Run if the count is less than 5
+                        if (m.repeatCount < 5) {
+                            speakAI("Reminder " + (m.repeatCount + 1) + ": Time for medicine " + m.n);
+                            m.repeatCount++;
+                            saveData(); // Save progress to localStorage
+                        }
+                    }
+                });
+            } // Checks every 20 seconds to catch the minute and repeat
+
+            navigator.geolocation.getCurrentPosition(p => {
+                document.getElementById('v-gps').innerText = p.coords.latitude.toFixed(3) + ", " + p.coords.longitude.toFixed(3);
+            });
+        
+
+        function quickPlay(name) {
+            document.getElementById('song-query').value = name;
+            playMusic();
+        }
+
+        function playMusic() {
+            const query = document.getElementById('song-query').value;
+            if (query) {
+                speakAI("Searching for " + query);
+                window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
+            } else {
+                alert("Please enter a song name.");
+            }
+        }
+
+        function startVoice() {
+            recognition.start();
+            document.getElementById('mic-trigger').classList.add('active');
+            document.getElementById('voice-status').innerText = "Listening...";
+        }
+
+        recognition.onresult = (e) => {
+            const cmd = e.results[0][0].transcript.toLowerCase();
+            document.getElementById('voice-status').innerText = `"${cmd}"`;
+            if (cmd.includes("play")) {
+                const songName = cmd.replace("play", "").trim();
+                document.getElementById('song-query').value = songName;
+                playMusic();
+            }
+        };
+
+        recognition.onend = () => document.getElementById('mic-trigger').classList.remove('active');
+
+        function speakAI(text) { window.speechSynthesis.speak(new SpeechSynthesisUtterance(text)); }
+
+        function updateMedUI() {
+            let dashHtml = ""; let setHtml = "";
+            db.meds.forEach((m, i) => {
+                dashHtml += `<div style="display:flex; justify-content:space-between; padding:5px 0;"><span>${m.n}</span><span style="color:var(--primary)">${m.t}</span></div>`;
+                setHtml += `<div style="display:flex; gap:5px; margin-bottom:5px">
+                    <input type="text" value="${m.n}" onchange="editMed(${i}, 'n', this.value)" style="flex:2; margin-bottom:0">
+                    <input type="time" value="${m.t}" onchange="editMed(${i}, 't', this.value)" style="flex:1; margin-bottom:0">
+                    <button onclick="delMed(${i})" style="color:red; border:none; background:none; cursor:pointer">X</button>
+                </div>`;
+            });
+            document.getElementById('med-list-dash').innerHTML = dashHtml || "No meds added.";
+            document.getElementById('set-meds').innerHTML = setHtml;
+        }
+
+        function editMed(i, k, v) { db.meds[i][k] = v; if (k === 't') db.meds[i].lastTriggeredDate = ""; saveData(); }
+        function delMed(i) { db.meds.splice(i, 1); saveData(); }
+        //function addBlankMed() { db.meds.push({ n: "Medicine", t: "09:00", lastTriggeredDate: "" }); updateMedUI(); }
+        function saveData() {
+  fetch("http://localhost:5000/user", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(db)
+  });
+
+  updateMedUI();
+}
+
+        function saveSettings() {
+            db.age = document.getElementById('s-age').value;
+            db.disease = document.getElementById('s-disease').value;
+            saveData();
+            launchApp();
+            alert("Settings Saved!");
+        }
+
+       function triggerSOS() {
+  speakAI("Emergency SOS. Alerting Guardians.");
+
+  fetch("http://localhost:5000/alert", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      message: "SOS Triggered",
+      user: db.name
+    })
+  });
+
+  speakAI("Emergency alert sent");
+}
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function fullReset() {
+  if (confirm("Erase all data?")) {
+
+    fetch("http://localhost:5000/user", {
+      method: "DELETE"
+    });
+
+    location.reload();
+  }
+} 
+        function predictDisease() {
+
+            let symptom = document.getElementById("symptom-input").value
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, "_");
+
+            if (!symptom) {
+                alert("Please enter a symptom");
+                return;
+            }
+
+            let disease = null;
+
+            // find disease from symptom dataset
+            for (let row of diseaseDataset) {
+
+                let values = Object.values(row);
+
+                for (let v of values) {
+
+                    let text = String(v).toLowerCase().trim();
+
+                    if (text.includes(symptom)) {
+                        disease = row.prognosis || row.disease || row.Disease;
+                        break;
+                    }
+
+                }
+
+                if (disease) break;
+            }
+
+            if (!disease) {
+
+                document.getElementById("disease-result").innerHTML =
+                    "No disease found in dataset.";
+
+                return;
+            }
+
+
+            // find description
+            let descObj = descriptionDataset.find(d =>
+                d.Disease.toLowerCase() === disease.toLowerCase()
+            );
+
+
+            // find precautions
+            let precObj = precautionDataset.find(p =>
+                p.Disease.toLowerCase() === disease.toLowerCase()
+            );
+
+
+            // build result
+            let resultHTML = "<b>Disease:</b> " + disease + "<br><br>";
+
+            if (descObj) {
+                resultHTML += "<b>About Disease:</b><br>" + descObj.Description + "<br><br>";
+            }
+
+            if (precObj) {
+                resultHTML += "<b>Precautions:</b><br>";
+                resultHTML += "• " + precObj.Precaution_1 + "<br>";
+                resultHTML += "• " + precObj.Precaution_2 + "<br>";
+                resultHTML += "• " + precObj.Precaution_3 + "<br>";
+                resultHTML += "• " + precObj.Precaution_4 + "<br>";
+            }
+
+            document.getElementById("disease-result").innerHTML = resultHTML;
+
+            speakAI("Possible disease could be " + disease);
+
+        }
+        /*SMARTSAATHI VOICE ASSISTANT*/
+
+        const assistant = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        assistant.lang = "en-US";
+        assistant.continuous = true;
+        assistant.interimResults = false;
+
+
+        /* START VOICE */
+        function startVoice() {
+
+            assistant.start();
+
+            document.getElementById("voice-status").innerText = "Listening...";
+
+        }
+
+
+        /* PROCESS VOICE */
+        assistant.onresult = function (e) {
+
+            let command = e.results[e.results.length - 1][0].transcript
+                .toLowerCase()
+                .trim();
+
+            console.log("Voice Command:", command);
+
+
+            /*  MUSIC*/
+
+            if (command.includes("play")) {
+
+                let song = command.replace("play", "").trim();
+
+                if (song) {
+
+                    document.getElementById("song-query").value = song;
+
+                    speakAI("Playing " + song);
+
+                    playMusic();
+
+                }
+
+            }
+
+
+            /*DISEASE CHECK*/
+            /* DISEASE CHECK BY VOICE */
+
+            if (
+                command.includes("check disease") ||
+                command.includes("check symptom") ||
+                command.includes("symptom") ||
+                command.includes("disease")
+            ) {
+
+                let symptom = command
+                    .replace("check disease", "")
+                    .replace("check symptom", "")
+                    .replace("symptom", "")
+                    .replace("disease", "")
+                    .replace("check", "")
+                    .trim();
+
+                if (symptom) {
+
+                    showScreen("scr-check");
+
+                    document.getElementById("symptom-input").value = symptom;
+
+                    speakAI("Checking disease for " + symptom);
+
+                    setTimeout(() => {
+                        predictDisease();
+                    }, 800);
+
+                }
+
+            }
+
+
+            /* SET MEDICINE ALARM */
+
+            if (command.includes("set medicine")) {
+
+                let text = command.replace("set medicine", "").trim();
+
+                let parts = text.split(" at ");
+
+                if (parts.length === 2) {
+
+                    let medName = parts[0];
+                    let time = parts[1];
+
+                    time = time.replace(".", ":");
+
+                    db.meds.push({
+                        n: medName,
+                        t: time,
+                        lastTriggeredDate: "",
+                        repeatCount: 0
+                    });
+
+                    saveData();
+
+                    speakAI("Medicine reminder set for " + medName + " at " + time);
+
+                }
+
+            }
+
+
+            /* NAVIGATION*/
+
+            if (command.includes("open settings")) {
+
+                showScreen("scr-settings");
+
+                speakAI("Opening settings");
+
+            }
+
+            if (command.includes("open dashboard")) {
+
+                showScreen("scr-dash");
+
+                speakAI("Opening dashboard");
+
+            }
+
+            if (command.includes("go back")) {
+
+                showScreen("scr-dash");
+
+            }
+
+
+            /*SOS */
+
+            if (command.includes("sos") || command.includes("help me")) {
+
+                speakAI("Emergency activated");
+
+                triggerSOS();
+
+            }
+
+        };
+        
+
+
+        /* RESET LISTENER */
+        assistant.onend = function () {
+
+            document.getElementById("voice-status").innerText = "Voice Assistant Ready";
+
+        };
+        function getHealthPlan(disease) {
+
+            disease = disease.toLowerCase();
+
+            if (disease.includes("diabetes")) {
+                return {
+                    walk: "30-45 mins/day",
+                    water: "2-3 liters/day",
+                    diet: "Low sugar, high fiber diet"
+                };
+            }
+
+            if (disease.includes("heart")) {
+                return {
+                    walk: "20-30 mins/day (slow pace)",
+                    water: "1.5-2 liters/day",
+                    diet: "Low salt, low fat diet"
+                };
+            }
+
+            if (disease.includes("bp") || disease.includes("hypertension")) {
+                return {
+                    walk: "30 mins/day",
+                    water: "2-2.5 liters/day",
+                    diet: "Low sodium diet"
+                };
+            }
+
+            if (disease.includes("asthma")) {
+                return {
+                    walk: "15-20 mins/day (light)",
+                    water: "2 liters/day",
+                    diet: "Avoid cold & dusty food"
+                };
+            }
+
+            // Default (healthy elderly)
+            return {
+                walk: "20-30 mins/day",
+                water: "2 liters/day",
+                diet: "Balanced diet"
+            };
+        } 
+    </script>
+</body>
+
+</html>
